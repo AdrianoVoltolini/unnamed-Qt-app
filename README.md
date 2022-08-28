@@ -2,4 +2,4 @@
 
 The aim of this project is to develop a mobile app for complex statistical analysis that does not require a programming background.
 
-This will be achieved using the PySide module, once it will support Android (soon, hopefully).
+This will be achieved using the PySide module, once it supports Android (soon, hopefully).
