@@ -16,7 +16,7 @@ class InputWindow(QtWidgets.QMainWindow):
     
     def load(self):
         #ricarica finestra principale
-        self.dataframe = self.carica_dataframe()
+        self.dataframe = self.caricaDataframe()
         self.widget_main = QtWidgets.QWidget()
         self.layout_main = QtWidgets.QVBoxLayout()
         self.scrollatore = QtWidgets.QScrollArea()
@@ -28,14 +28,14 @@ class InputWindow(QtWidgets.QMainWindow):
         self.bottone_home = QtWidgets.QPushButton("HOME")
         self.layout_top.addWidget(self.bottone_home)
         self.bottone_home.setEnabled(False)
-        self.bottone_stat = QtWidgets.QPushButton("STAT")
+        self.bottone_stat = QtWidgets.QPushButton("STATS")
         self.bottone_stat.pressed.connect(self.cambiaFinestra)
 
         self.layout_top.addWidget(self.bottone_stat)
         self.layout_main.addLayout(self.layout_top)
 
         for index in range(len(self.dataframe.columns)):
-            cornice = self.crea_cornice(index)
+            cornice = self.creaCornice(index)
             self.layout_main.addWidget(cornice)
             
         self.bottone_salvatore = QtWidgets.QPushButton("SAVE")
@@ -50,14 +50,18 @@ class InputWindow(QtWidgets.QMainWindow):
         self.layout_main.addWidget(self.bottone_creatore)
         self.bottone_creatore.pressed.connect(self.creatore)
 
+
+
+
+
         self.scrollatore.setWidgetResizable(True)
         self.scrollatore.setWidget(self.widget_main)
-
         self.widget_main.setLayout(self.layout_main)
         self.setCentralWidget(self.scrollatore)
 
     def cambiaFinestra(self):
-        self.parent().findChild(QtWidgets.QMainWindow,name="stat").show()
+        self.parent().findChild(QtWidgets.QMainWindow,name="stats").load()
+        self.parent().findChild(QtWidgets.QMainWindow,name="stats").show()
         self.hide()
         
     def editore(self):
@@ -74,14 +78,14 @@ class InputWindow(QtWidgets.QMainWindow):
         creatore.exec()
         self.load()
 
-    def carica_dataframe(self):
+    def caricaDataframe(self):
         #apre dataframe da un file compresso bz2
         with bz2.open("compressed.bz2","rb") as input:
             dataset_binary = input.read()
 
         return pd.read_csv(BytesIO(dataset_binary),index_col=0)
     
-    def crea_cornice(self,indice):
+    def creaCornice(self,indice):
             #funzione che crea gli elementi che mostrano le variabili
             #nella pagina principale
             colonna = self.dataframe.columns[indice]

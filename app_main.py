@@ -8,18 +8,15 @@ from app_input import InputWindow
 class RootWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-
         self.setGeometry(0,0,270,600)
-
+        
         self.windows = [StatWindow(),InputWindow()]
-
         for w in self.windows:
             w.setParent(self)
     
     def resizeEvent(self, event: QtGui.QResizeEvent) -> None:
         for w in self.windows:
             w.setFixedSize(self.size())
-            
         return super().resizeEvent(event)
 
 
