@@ -5,6 +5,7 @@ from PySide6 import QtWidgets
 class StatWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setObjectName("stat")
         self.load()
 
     def load(self):
@@ -30,8 +31,7 @@ class StatWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.scrollatore)
 
     def cambiaFinestra(self):
-        self.parent().findChild(QtWidgets.QMainWindow,name="main").setGeometry(self.geometry())
-        self.parent().findChild(QtWidgets.QMainWindow,name="main").show()
+        self.parent().findChild(QtWidgets.QMainWindow,name="input").show()
         self.hide()
         
 

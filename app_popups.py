@@ -42,7 +42,7 @@ class PopupCreator(QtWidgets.QDialog):
                 lista_nomi = lista_nomi + self.input_parametro.toPlainText().split("\n")
 
         self.output_nome = "_".join(lista_nomi)
-        self.finestra.dataframe = pd.concat([self.finestra.dataframe,pd.Series(name=self.output_nome)],axis=1)
+        self.finestra.dataframe = pd.concat([self.finestra.dataframe,pd.Series(name=self.output_nome,dtype="object")],axis=1)
         with bz2.open("compressed.bz2","wb") as output:
             output.write(self.finestra.dataframe.to_csv().encode())
         self.close()
