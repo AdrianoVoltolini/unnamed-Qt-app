@@ -12,7 +12,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         #finestra principale
         super().__init__()
-        self.setGeometry(0,0,270,600)
+        self.setObjectName("main")
         self.load()
     
     def load(self):
@@ -30,7 +30,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.layout_top.addWidget(self.bottone_home)
         self.bottone_home.setEnabled(False)
         self.bottone_stat = QtWidgets.QPushButton("STAT")
-        self.finestra_stat = StatWindow(self)
         self.bottone_stat.pressed.connect(self.cambiaFinestra)
 
         self.layout_top.addWidget(self.bottone_stat)
@@ -59,11 +58,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.scrollatore)
 
     def cambiaFinestra(self):
-        self.finestra_stat.setGeometry(self.geometry())
-        self.finestra_stat.show()
+        self.parent().findChild(StatWindow).setGeometry(self.geometry())
+        self.parent().findChild(StatWindow).show()
         self.hide()
         
-
     def editore(self):
         #elimina variabile dalla pagina principale e dal dataframe
         for indice in range(len(self.bottoni_edit)):
@@ -119,6 +117,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 input_object = QtWidgets.QLineEdit()
                 input_object.setValidator(QtGui.QDoubleValidator())
                 layout_sub.addWidget(input_object)
+                input_object.setFrame(0)
 
             elif colonna[0] == "C":
                 lista_temp = colonna.split("_")
@@ -131,6 +130,7 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 layout_sub.addWidget(QtWidgets.QLabel(colonna[2:]))
                 input_object = QtWidgets.QPlainTextEdit()
+                input_object.setFrameStyle(0)
 
             layout_sub.addWidget(input_object)
             bottone_edit = QtWidgets.QPushButton("EDIT")
@@ -169,6 +169,13 @@ class MainWindow(QtWidgets.QMainWindow):
 if __name__ == "__main__":
 
     app = QtWidgets.QApplication([])
-    w = MainWindow()
-    w.show()
+    rootWindow = QtWidgets.QMainWindow()
+    rootWindow.setFixedSize(270,600)
+    mainWindow = MainWindow()
+    mainWindow.setParent(rootWindow)
+    mainWindow.setGeometry(mainWindow.parent().geometry())
+    statWindow = StatWindow()
+    statWindow.hide()
+    statWindow.setParent(rootWindow)
+    rootWindow.show()
     app.exec()
