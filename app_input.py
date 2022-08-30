@@ -11,7 +11,7 @@ class InputWindow(QtWidgets.QMainWindow):
     def __init__(self):
         #finestra principale
         super().__init__()
-        self.setObjectName("input")
+        self.setObjectName("INPUT")
         self.load()
     
     def load(self):
@@ -19,20 +19,9 @@ class InputWindow(QtWidgets.QMainWindow):
         self.dataframe = self.caricaDataframe()
         self.widget_main = QtWidgets.QWidget()
         self.layout_main = QtWidgets.QVBoxLayout()
-        self.scrollatore = QtWidgets.QScrollArea()
+
         self.bottoni_edit = []
         self.widget_inputs = []
-
-        self.layout_top = QtWidgets.QHBoxLayout()
-        
-        self.bottone_home = QtWidgets.QPushButton("HOME")
-        self.layout_top.addWidget(self.bottone_home)
-        self.bottone_home.setEnabled(False)
-        self.bottone_stat = QtWidgets.QPushButton("STATS")
-        self.bottone_stat.pressed.connect(self.cambiaFinestra)
-
-        self.layout_top.addWidget(self.bottone_stat)
-        self.layout_main.addLayout(self.layout_top)
 
         for index in range(len(self.dataframe.columns)):
             cornice = self.creaCornice(index)
@@ -54,15 +43,10 @@ class InputWindow(QtWidgets.QMainWindow):
 
 
 
-        self.scrollatore.setWidgetResizable(True)
-        self.scrollatore.setWidget(self.widget_main)
-        self.widget_main.setLayout(self.layout_main)
-        self.setCentralWidget(self.scrollatore)
 
-    def cambiaFinestra(self):
-        self.parent().findChild(QtWidgets.QMainWindow,name="stats").load()
-        self.parent().findChild(QtWidgets.QMainWindow,name="stats").show()
-        self.hide()
+        self.widget_main.setLayout(self.layout_main)
+        self.setCentralWidget(self.widget_main)
+
         
     def editore(self):
         #elimina variabile dalla pagina principale e dal dataframe

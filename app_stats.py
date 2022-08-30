@@ -8,26 +8,14 @@ import bz2
 class StatWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setObjectName("stats")
+        self.setObjectName("STATS")
         self.load()
 
     def load(self):
         self.dataframe = self.caricaDataframe()
         self.widget_main = QtWidgets.QWidget()
         self.layout_main = QtWidgets.QVBoxLayout()
-        self.scrollatore = QtWidgets.QScrollArea()
 
-        self.layout_top = QtWidgets.QHBoxLayout()
-        
-        self.bottone_home = QtWidgets.QPushButton("HOME")
-        self.layout_top.addWidget(self.bottone_home)
-        self.bottone_home.pressed.connect(self.cambiaFinestra)
-
-        self.bottone_stat = QtWidgets.QPushButton("STATS")
-        self.layout_top.addWidget(self.bottone_stat)
-        self.bottone_stat.setEnabled(False)
-
-        self.layout_main.addLayout(self.layout_top)
 
         self.response = QtWidgets.QComboBox()
         self.variables = [x.split("_")[1] for x in self.dataframe.columns]
@@ -60,16 +48,8 @@ class StatWindow(QtWidgets.QMainWindow):
                 self.layout_checksR.addWidget(bottone)
 
 
-
-
-
-
-
-
-        self.scrollatore.setWidgetResizable(True)
-        self.scrollatore.setWidget(self.widget_main)
         self.widget_main.setLayout(self.layout_main)
-        self.setCentralWidget(self.scrollatore)
+        self.setCentralWidget(self.widget_main)
 
     def cambiaFinestra(self):
         self.parent().findChild(QtWidgets.QMainWindow,name="input").show()

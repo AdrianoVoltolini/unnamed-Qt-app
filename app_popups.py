@@ -77,7 +77,7 @@ class PopupEditor(QtWidgets.QDialog):
         self.nome = self.finestra.bottoni_edit[self.indice].objectName()
 
         self.nome_editore = QtWidgets.QLineEdit(self.nome)
-        self.bottone_eliminatore = QtWidgets.QPushButton("DELETE THIS VARIABLE")
+        self.bottone_eliminatore = QtWidgets.QPushButton("DELETE IT")
         self.bottone_eliminatore.pressed.connect(self.eliminatore)
 
         self.bottone_salvatore = QtWidgets.QPushButton("SAVE")
@@ -98,6 +98,7 @@ class PopupEditor(QtWidgets.QDialog):
         self.finestra.dataframe = self.finestra.dataframe.drop(self.finestra.dataframe.columns[self.indice],axis=1)
         self.bottone_eliminatore.setText("DELETED")
         self.bottone_eliminatore.setEnabled(False)
+        self.nome_editore.setEnabled(False)
 
 
     def salvatore(self):
