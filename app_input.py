@@ -69,14 +69,13 @@ class InputWindow(QtWidgets.QMainWindow):
         for indice in range(len(self.bottoni_edit)):
             if self.bottoni_edit[indice].isDown():
                 PopupEditor(self,indice).exec()
-                self.load()
                 break
 
     def creatore(self):
         #apre popup per creare nuova variabile
         creatore = PopupCreator(self)
         creatore.exec()
-        self.load()
+
 
     def caricaDataframe(self):
         #apre dataframe da un file compresso bz2
@@ -91,11 +90,9 @@ class InputWindow(QtWidgets.QMainWindow):
             colonna = self.dataframe.columns[indice]
             layout_sub = QtWidgets.QHBoxLayout()
             layout_sub.setObjectName(f"layout_sub_{indice}")
-            cornice =  QtWidgets.QFrame()
+            cornice =  QtWidgets.QGroupBox()
             cornice.setObjectName(f"cornice_{indice}")
             cornice.setLayout(layout_sub)
-            cornice.setFrameStyle(1)
-            cornice.setContentsMargins(2,2,2,2)
             if colonna[0] == "D":
 
                 if colonna == "D_time":

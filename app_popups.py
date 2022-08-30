@@ -45,6 +45,7 @@ class PopupCreator(QtWidgets.QDialog):
         self.finestra.dataframe = pd.concat([self.finestra.dataframe,pd.Series(name=self.output_nome,dtype="object")],axis=1)
         with bz2.open("compressed.bz2","wb") as output:
             output.write(self.finestra.dataframe.to_csv().encode())
+        self.finestra.load()
         self.close()
 
     def attivaTesto(self):
@@ -70,6 +71,7 @@ class PopupEditor(QtWidgets.QDialog):
     #classe per il popup del pulsante che edita una nuova variabile
     def __init__(self,finestra,indice):
         super().__init__()
+
         self.finestra = finestra
         self.indice = indice
         self.nome = self.finestra.bottoni_edit[self.indice].objectName()
@@ -103,4 +105,5 @@ class PopupEditor(QtWidgets.QDialog):
         self.finestra.dataframe = self.finestra.dataframe.rename({self.nome : self.nome_editore.text()},axis=1)
         with bz2.open("compressed.bz2","wb") as output:
             output.write(self.finestra.dataframe.to_csv().encode())
+        self.finestra.load()
         self.close()

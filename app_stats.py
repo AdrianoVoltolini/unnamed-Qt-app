@@ -41,11 +41,15 @@ class StatWindow(QtWidgets.QMainWindow):
         self.layout_checksR = QtWidgets.QVBoxLayout()
         self.layout_checkboxes.addLayout(self.layout_checksL)
         self.layout_checkboxes.addLayout(self.layout_checksR)
-        self.layout_main.addWidget(QtWidgets.QLabel("Predictors:"))
-        self.layout_main.addLayout(self.layout_checkboxes)
+
+        self.cornice_checkboxes = QtWidgets.QGroupBox()
+        self.cornice_checkboxes.setTitle("Predictors:")
+        self.cornice_checkboxes.setLayout(self.layout_checkboxes)
+        self.layout_main.addWidget(self.cornice_checkboxes)
 
         self.checkgroup = QtWidgets.QButtonGroup()
         self.checkgroup.setExclusive(False)
+
 
         for x in range(len(self.variables)):
             bottone = QtWidgets.QCheckBox(self.variables[x])
