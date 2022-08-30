@@ -1,7 +1,7 @@
 from io import BytesIO
 import pandas as pd
 import bz2
-from PySide6 import QtWidgets, QtGui, QtCore
+from PySide6 import QtWidgets, QtGui
 from datetime import datetime
 from app_popups import PopupCreator, PopupEditor
 
@@ -27,7 +27,7 @@ class InputWindow(QtWidgets.QMainWindow):
             cornice = self.creaCornice(index)
             self.layout_main.addWidget(cornice)
             
-        self.bottone_salvatore = QtWidgets.QPushButton("SAVE")
+        self.bottone_salvatore = QtWidgets.QPushButton("SAVE DATA")
         self.layout_main.addWidget(self.bottone_salvatore)
         self.bottone_salvatore.pressed.connect(self.salvatore)
 

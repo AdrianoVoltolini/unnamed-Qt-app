@@ -43,6 +43,7 @@ class RootWindow(QtWidgets.QMainWindow):
         for i in range(self.layout_top.count()):
             if self.layout_top.itemAt(i).widget().isDown():
                 self.layout_top.itemAt(i).widget().setEnabled(False)
+                self.finestre[i].load()
                 self.finestre[i].show()
             else:
                 self.layout_top.itemAt(i).widget().setEnabled(True)
