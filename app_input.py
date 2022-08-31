@@ -12,13 +12,15 @@ class InputWindow(QtWidgets.QMainWindow):
         #finestra principale
         super().__init__()
         self.setObjectName("INPUT")
-        self.load()
     
     def load(self):
         #ricarica finestra principale
-        self.dataframe = self.caricaDataframe()
+        self.dataframe = self.parent().parent().parent().parent().dataframe
+
         self.widget_main = QtWidgets.QWidget()
         self.layout_main = QtWidgets.QVBoxLayout()
+        self.widget_main.setLayout(self.layout_main)
+        self.setCentralWidget(self.widget_main)
 
         self.bottoni_edit = []
         self.widget_inputs = []
@@ -39,14 +41,6 @@ class InputWindow(QtWidgets.QMainWindow):
         self.layout_main.addWidget(self.bottone_creatore)
         self.bottone_creatore.pressed.connect(self.creatore)
 
-
-
-
-
-
-        self.widget_main.setLayout(self.layout_main)
-        self.setCentralWidget(self.widget_main)
-
         
     def editore(self):
         #elimina variabile dalla pagina principale e dal dataframe
@@ -59,14 +53,6 @@ class InputWindow(QtWidgets.QMainWindow):
         #apre popup per creare nuova variabile
         creatore = PopupCreator(self)
         creatore.exec()
-
-
-    def caricaDataframe(self):
-        #apre dataframe da un file compresso bz2
-        with bz2.open("compressed.bz2","rb") as input:
-            dataset_binary = input.read()
-
-        return pd.read_csv(BytesIO(dataset_binary),index_col=0)
     
     def creaCornice(self,indice):
             #funzione che crea gli elementi che mostrano le variabili
@@ -142,7 +128,7 @@ class InputWindow(QtWidgets.QMainWindow):
                     self.newline.append(i.toPlainText())
 
         self.dataframe.loc[self.dataframe.shape[0],:] = pd.Series(self.newline,index=self.dataframe.columns)
-        with bz2.open("compressed.bz2","wb") as output:
-            output.write(self.dataframe.to_csv().encode())
+        self.parent().parent().parent().parent().dataframe = self.dataframe
+        self.parent().parent().parent().parent().salvaDataframe()
         self.load()
 

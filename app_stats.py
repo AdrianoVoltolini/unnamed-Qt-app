@@ -9,12 +9,14 @@ class StatWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setObjectName("STATS")
-        self.load()
 
     def load(self):
-        self.dataframe = self.caricaDataframe()
+        self.dataframe = self.parent().parent().parent().parent().dataframe
+
         self.widget_main = QtWidgets.QWidget()
         self.layout_main = QtWidgets.QVBoxLayout()
+        self.widget_main.setLayout(self.layout_main)
+        self.setCentralWidget(self.widget_main)
 
 
         self.response = QtWidgets.QComboBox()
@@ -47,19 +49,8 @@ class StatWindow(QtWidgets.QMainWindow):
             else:
                 self.layout_checksR.addWidget(bottone)
 
-
-        self.widget_main.setLayout(self.layout_main)
-        self.setCentralWidget(self.widget_main)
-
     def cambiaFinestra(self):
         self.parent().findChild(QtWidgets.QMainWindow,name="input").show()
         self.hide()
-
-    def caricaDataframe(self):
-        #apre dataframe da un file compresso bz2
-        with bz2.open("compressed.bz2","rb") as input:
-            dataset_binary = input.read()
-
-        return pd.read_csv(BytesIO(dataset_binary),index_col=0)
         
 

@@ -42,9 +42,9 @@ class PopupCreator(QtWidgets.QDialog):
                 lista_nomi = lista_nomi + self.input_parametro.toPlainText().split("\n")
 
         self.output_nome = "_".join(lista_nomi)
-        self.finestra.dataframe = pd.concat([self.finestra.dataframe,pd.Series(name=self.output_nome,dtype="object")],axis=1)
-        with bz2.open("compressed.bz2","wb") as output:
-            output.write(self.finestra.dataframe.to_csv().encode())
+
+        self.finestra.parent().parent().parent().parent().dataframe = pd.concat(
+            [self.finestra.dataframe,pd.Series(name=self.output_nome,dtype="object")],axis=1)
         self.finestra.load()
         self.close()
 
@@ -95,16 +95,15 @@ class PopupEditor(QtWidgets.QDialog):
 
     def eliminatore(self):
         #elimina variabile dal dataframe
-        self.finestra.dataframe = self.finestra.dataframe.drop(self.finestra.dataframe.columns[self.indice],axis=1)
-        self.bottone_eliminatore.setText("DELETED")
-        self.bottone_eliminatore.setEnabled(False)
-        self.nome_editore.setEnabled(False)
+        self.finestra.parent().parent().parent().parent().dataframe = self.finestra.dataframe.drop(
+            self.finestra.dataframe.columns[self.indice],axis=1)
+        self.finestra.load()
+        self.close()
 
 
     def salvatore(self):
         # salva cambiamenti fatti
-        self.finestra.dataframe = self.finestra.dataframe.rename({self.nome : self.nome_editore.text()},axis=1)
-        with bz2.open("compressed.bz2","wb") as output:
-            output.write(self.finestra.dataframe.to_csv().encode())
+        self.finestra.parent().parent().parent().parent().dataframe = self.finestra.dataframe.rename(
+            {self.nome : self.nome_editore.text()},axis=1)
         self.finestra.load()
         self.close()
