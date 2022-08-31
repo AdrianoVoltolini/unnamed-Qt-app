@@ -12,11 +12,11 @@ class InputWindow(QtWidgets.QMainWindow):
         #finestra principale
         super().__init__()
         self.setObjectName("INPUT")
+
     
     def load(self):
         #ricarica finestra principale
-        self.dataframe = self.parent().parent().parent().parent().dataframe
-
+        self.root = self.parent().parent().parent().parent()
         self.widget_main = QtWidgets.QWidget()
         self.layout_main = QtWidgets.QVBoxLayout()
         self.widget_main.setLayout(self.layout_main)
@@ -25,7 +25,7 @@ class InputWindow(QtWidgets.QMainWindow):
         self.bottoni_edit = []
         self.widget_inputs = []
 
-        for index in range(len(self.dataframe.columns)):
+        for index in range(len(self.root.dataframe.columns)):
             cornice = self.creaCornice(index)
             self.layout_main.addWidget(cornice)
             
@@ -57,7 +57,7 @@ class InputWindow(QtWidgets.QMainWindow):
     def creaCornice(self,indice):
             #funzione che crea gli elementi che mostrano le variabili
             #nella pagina principale
-            colonna = self.dataframe.columns[indice]
+            colonna = self.root.dataframe.columns[indice]
             layout_sub = QtWidgets.QHBoxLayout()
             layout_sub.setObjectName(f"layout_sub_{indice}")
             cornice =  QtWidgets.QGroupBox()
@@ -113,7 +113,7 @@ class InputWindow(QtWidgets.QMainWindow):
             return cornice
 
     def showatore(self):
-        print(self.dataframe)
+        print(self.root.dataframe)
 
     def salvatore(self):
         self.newline = []
@@ -127,8 +127,7 @@ class InputWindow(QtWidgets.QMainWindow):
                 except:
                     self.newline.append(i.toPlainText())
 
-        self.dataframe.loc[self.dataframe.shape[0],:] = pd.Series(self.newline,index=self.dataframe.columns)
-        self.parent().parent().parent().parent().dataframe = self.dataframe
-        self.parent().parent().parent().parent().salvaDataframe()
+        self.root.dataframe.loc[self.dataframe.shape[0],:] = pd.Series(self.newline,index=self.root.dataframe.columns)
+        self.root.salvaDataframe()
         self.load()
 

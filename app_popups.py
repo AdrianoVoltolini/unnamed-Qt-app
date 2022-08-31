@@ -43,8 +43,8 @@ class PopupCreator(QtWidgets.QDialog):
 
         self.output_nome = "_".join(lista_nomi)
 
-        self.finestra.parent().parent().parent().parent().dataframe = pd.concat(
-            [self.finestra.dataframe,pd.Series(name=self.output_nome,dtype="object")],axis=1)
+        self.finestra.root.dataframe = pd.concat(
+            [self.finestra.root.dataframe,pd.Series(name=self.output_nome,dtype="object")],axis=1)
         self.finestra.load()
         self.close()
 
@@ -80,7 +80,7 @@ class PopupEditor(QtWidgets.QDialog):
         self.bottone_eliminatore = QtWidgets.QPushButton("DELETE IT")
         self.bottone_eliminatore.pressed.connect(self.eliminatore)
 
-        self.bottone_salvatore = QtWidgets.QPushButton("SAVE")
+        self.bottone_salvatore = QtWidgets.QPushButton("DONE")
         self.bottone_salvatore.pressed.connect(self.salvatore)
 
         self.layout_bottoni = QtWidgets.QHBoxLayout()
@@ -95,15 +95,15 @@ class PopupEditor(QtWidgets.QDialog):
 
     def eliminatore(self):
         #elimina variabile dal dataframe
-        self.finestra.parent().parent().parent().parent().dataframe = self.finestra.dataframe.drop(
-            self.finestra.dataframe.columns[self.indice],axis=1)
+        self.finestra.root.dataframe = self.finestra.root.dataframe.drop(
+            self.finestra.root.dataframe.columns[self.indice],axis=1)
         self.finestra.load()
         self.close()
 
 
     def salvatore(self):
         # salva cambiamenti fatti
-        self.finestra.parent().parent().parent().parent().dataframe = self.finestra.dataframe.rename(
+        self.finestra.root.dataframe = self.finestra.root.dataframe.rename(
             {self.nome : self.nome_editore.text()},axis=1)
         self.finestra.load()
         self.close()

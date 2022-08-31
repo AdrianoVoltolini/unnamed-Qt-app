@@ -10,9 +10,9 @@ class StatWindow(QtWidgets.QMainWindow):
         super().__init__()
         self.setObjectName("STATS")
 
-    def load(self):
-        self.dataframe = self.parent().parent().parent().parent().dataframe
 
+    def load(self):
+        self.root = self.parent().parent().parent().parent()
         self.widget_main = QtWidgets.QWidget()
         self.layout_main = QtWidgets.QVBoxLayout()
         self.widget_main.setLayout(self.layout_main)
@@ -20,7 +20,7 @@ class StatWindow(QtWidgets.QMainWindow):
 
 
         self.response = QtWidgets.QComboBox()
-        self.variables = [x.split("_")[1] for x in self.dataframe.columns]
+        self.variables = [x.split("_")[1] for x in self.root.dataframe.columns]
         self.response.addItems(self.variables)
         self.layout_response = QtWidgets.QHBoxLayout()
         self.layout_response.addWidget(QtWidgets.QLabel("Response:"))

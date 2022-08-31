@@ -37,9 +37,11 @@ class HomeWindow(QtWidgets.QMainWindow):
         self.layout_main.addWidget(self.bottone_crea)
 
     def datasetPremuto(self):
+        self.root = self.parent().parent().parent().parent()
         for b in self.bottoni:
             if b.isDown():
                 with bz2.open(f"datasets//{b.text()}.bz2","rb") as input:
                     dataset_binary = input.read()
-                self.parent().parent().parent().parent().dataframe = pd.read_csv(BytesIO(dataset_binary),index_col=0)
-                self.parent().parent().parent().parent().chosen_dataset = b.text()
+                self.root.dataframe = pd.read_csv(BytesIO(dataset_binary),index_col=0)
+                self.root.chosen_dataset = b.text()
+                b.setEnabled(False)
