@@ -1,6 +1,7 @@
 
+from xml.dom.minidom import Notation
 import pandas as pd
-from PySide6 import QtWidgets, QtGui
+from PySide6 import QtWidgets, QtGui, QtCore
 from datetime import datetime
 from app_popups import PopupVarCreator, PopupEditor
 
@@ -70,7 +71,7 @@ class InputWindow(QtWidgets.QMainWindow):
                 if colonna == "D_time":
                     layout_sub.addWidget(QtWidgets.QLabel(colonna[2:]))
                     input_object = QtWidgets.QLabel(
-                        datetime.now().isoformat(sep=" ",timespec="minutes"))
+                        str(int(datetime.now().timestamp())))
 
                 elif colonna[0:7] == "D_steam":
                     layout_sub.addWidget(QtWidgets.QLabel(colonna[2:7]))
@@ -86,7 +87,9 @@ class InputWindow(QtWidgets.QMainWindow):
             elif colonna[0] == "R":
                 layout_sub.addWidget(QtWidgets.QLabel(colonna[2:]))
                 input_object = QtWidgets.QLineEdit()
-                input_object.setValidator(QtGui.QDoubleValidator())
+                regular_expression = QtCore.QRegularExpression("[0-9]+[.]*[0-9]*")
+                validatore = QtGui.QRegularExpressionValidator(regular_expression)
+                input_object.setValidator(validatore)
                 layout_sub.addWidget(input_object)
                 input_object.setFrame(0)
 
@@ -122,7 +125,7 @@ class InputWindow(QtWidgets.QMainWindow):
         if self.root.chosen_dataset != "":
             for i in self.widget_inputs:
                 try:
-                    self.newline.append(i.text())
+                    self.newline.append(float(i.text()))
                 except:
                     try:
                         self.newline.append(i.currentText())
