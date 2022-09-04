@@ -34,6 +34,8 @@ class RootWindow(QtWidgets.QMainWindow):
             self.layout_main.addWidget(w)
             if w.objectName() != "HOME":
                 w.hide()
+            else:
+                bottone.setEnabled(False)
         
         self.scrollatore.setWidgetResizable(True)
         self.scrollatore.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)

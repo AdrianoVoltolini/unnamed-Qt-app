@@ -1,5 +1,4 @@
 
-import bz2
 from PySide6 import QtWidgets
 import pandas as pd
 
@@ -12,17 +11,19 @@ class PopupCreator(QtWidgets.QDialog):
         self.output_nome = ""
 
         self.scegli_nome = QtWidgets.QLineEdit("choose a name")
+        self.scegli_nome.textChanged.connect(self.controllaNome)
 
         self.scegli_tipo = QtWidgets.QComboBox()
         self.scegli_tipo.addItems(["Regression","Classification","String","Default"])
         self.scegli_tipo.currentIndexChanged.connect(self.attivaTesto)
 
-        self.bottone_finito = QtWidgets.QPushButton("create")        
+        self.bottone_finito = QtWidgets.QPushButton("create") 
+        self.bottone_finito.setEnabled(False)       
         self.bottone_finito.pressed.connect(self.finitore)
 
         self.input_parametro = QtWidgets.QTextEdit("one class or parameter per line")
         self.input_parametro.setEnabled(False)
-        self.input_parametro.textChanged.connect(self.controllatore)
+        self.input_parametro.textChanged.connect(self.controllaParametri)
 
         self.layout_main = QtWidgets.QVBoxLayout()
         self.layout_main.addWidget(self.scegli_nome)
@@ -58,12 +59,22 @@ class PopupCreator(QtWidgets.QDialog):
         else:
             self.input_parametro.setEnabled(False)
     
-    def controllatore(self):
+    def controllaParametri(self):
         #controlla che non ci sia il carattere _ nei parametri
         if "_" in self.input_parametro.toPlainText():
             self.bottone_finito.setEnabled(False)
         else:
             self.bottone_finito.setEnabled(True)
+    
+    def controllaNome(self):
+        #controlla che non ci sia già una variabile con lo stesso nome
+        if self.scegli_nome.text() in [x.split("_")[1] for x in self.finestra.root.dataframe.columns]:
+            self.bottone_finito.setEnabled(False)
+            self.bottone_finito.setText("choose a different name")
+        else:
+            self.bottone_finito.setEnabled(True)
+            self.bottone_finito.setText("create")
+
 
 
 
@@ -77,10 +88,13 @@ class PopupEditor(QtWidgets.QDialog):
         self.nome = self.finestra.bottoni_edit[self.indice].objectName()
 
         self.nome_editore = QtWidgets.QLineEdit(self.nome)
+        self.nome_editore.textChanged.connect(self.controllaNome)
+
         self.bottone_eliminatore = QtWidgets.QPushButton("DELETE IT")
         self.bottone_eliminatore.pressed.connect(self.eliminatore)
 
-        self.bottone_salvatore = QtWidgets.QPushButton("DONE")
+        self.bottone_salvatore = QtWidgets.QPushButton("SAVE")
+        self.bottone_salvatore.setEnabled(False)
         self.bottone_salvatore.pressed.connect(self.salvatore)
 
         self.layout_bottoni = QtWidgets.QHBoxLayout()
@@ -107,3 +121,11 @@ class PopupEditor(QtWidgets.QDialog):
             {self.nome : self.nome_editore.text()},axis=1)
         self.finestra.load()
         self.close()
+    
+    def controllaNome(self):
+        #controlla che non ci sia già una variabile con lo stesso nome
+        if self.nome_editore.text().split("_")[1] in [x.split("_")[1] for x in self.finestra.root.dataframe.columns]:
+            self.bottone_salvatore.setEnabled(False)
+        else:
+            self.bottone_salvatore.setEnabled(True)
+            self.bottone_salvatore.setText("SAVE")

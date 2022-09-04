@@ -1,6 +1,5 @@
-from io import BytesIO
+
 import pandas as pd
-import bz2
 from PySide6 import QtWidgets, QtGui
 from datetime import datetime
 from app_popups import PopupCreator, PopupEditor
@@ -21,6 +20,9 @@ class InputWindow(QtWidgets.QMainWindow):
         self.layout_main = QtWidgets.QVBoxLayout()
         self.widget_main.setLayout(self.layout_main)
         self.setCentralWidget(self.widget_main)
+
+        if self.root.dataframe.shape == (0,0):
+            self.layout_main.addWidget(QtWidgets.QLabel("( ͡° ͜ʖ ͡°) hi"))
 
         self.bottoni_edit = []
         self.widget_inputs = []
@@ -127,7 +129,7 @@ class InputWindow(QtWidgets.QMainWindow):
                 except:
                     self.newline.append(i.toPlainText())
 
-        self.root.dataframe.loc[self.dataframe.shape[0],:] = pd.Series(self.newline,index=self.root.dataframe.columns)
+        self.root.dataframe.loc[self.root.dataframe.shape[0],:] = pd.Series(self.newline,index=self.root.dataframe.columns)
         self.root.salvaDataframe()
         self.load()
 

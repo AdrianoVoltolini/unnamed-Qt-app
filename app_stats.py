@@ -1,8 +1,7 @@
 
 from PySide6 import QtWidgets
-from io import BytesIO
 import pandas as pd
-import bz2
+
 
 
 class StatWindow(QtWidgets.QMainWindow):
