@@ -48,8 +48,5 @@ class StatWindow(QtWidgets.QMainWindow):
             else:
                 self.layout_checksR.addWidget(bottone)
 
-    def cambiaFinestra(self):
-        self.parent().findChild(QtWidgets.QMainWindow,name="input").show()
-        self.hide()
         
 

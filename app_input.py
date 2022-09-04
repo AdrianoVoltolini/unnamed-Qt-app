@@ -2,7 +2,7 @@
 import pandas as pd
 from PySide6 import QtWidgets, QtGui
 from datetime import datetime
-from app_popups import PopupCreator, PopupEditor
+from app_popups import PopupVarCreator, PopupEditor
 
 
 
@@ -53,7 +53,7 @@ class InputWindow(QtWidgets.QMainWindow):
 
     def creatore(self):
         #apre popup per creare nuova variabile
-        creatore = PopupCreator(self)
+        creatore = PopupVarCreator(self)
         creatore.exec()
     
     def creaCornice(self,indice):
@@ -119,17 +119,17 @@ class InputWindow(QtWidgets.QMainWindow):
 
     def salvatore(self):
         self.newline = []
-
-        for i in self.widget_inputs:
-            try:
-                self.newline.append(i.text())
-            except:
+        if self.root.chosen_dataset != "":
+            for i in self.widget_inputs:
                 try:
-                    self.newline.append(i.currentText())
+                    self.newline.append(i.text())
                 except:
-                    self.newline.append(i.toPlainText())
+                    try:
+                        self.newline.append(i.currentText())
+                    except:
+                        self.newline.append(i.toPlainText())
 
-        self.root.dataframe.loc[self.root.dataframe.shape[0],:] = pd.Series(self.newline,index=self.root.dataframe.columns)
-        self.root.salvaDataframe()
-        self.load()
+            self.root.dataframe.loc[self.root.dataframe.shape[0],:] = pd.Series(self.newline,index=self.root.dataframe.columns)
+            self.root.salvaDataframe()
+            self.load()
 

@@ -44,16 +44,17 @@ class RootWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.scrollatore)
 
     def cambiaFinestra(self):
-        for w in self.finestre:
-            w.hide()
+        if self.chosen_dataset != "":
+            for w in self.finestre:
+                w.hide()
 
-        for i in range(self.layout_top.count()):
-            if self.layout_top.itemAt(i).widget().isDown():
-                self.layout_top.itemAt(i).widget().setEnabled(False)
-                self.finestre[i].load()
-                self.finestre[i].show()
-            else:
-                self.layout_top.itemAt(i).widget().setEnabled(True)
+            for i in range(self.layout_top.count()):
+                if self.layout_top.itemAt(i).widget().isDown():
+                    self.layout_top.itemAt(i).widget().setEnabled(False)
+                    self.finestre[i].load()
+                    self.finestre[i].show()
+                else:
+                    self.layout_top.itemAt(i).widget().setEnabled(True)
 
     def resizeEvent(self, event: QtGui.QResizeEvent) -> None:
         for w in self.children()[1:]:

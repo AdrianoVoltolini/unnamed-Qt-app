@@ -4,6 +4,7 @@ from io import BytesIO
 import pandas as pd
 import bz2
 from os import listdir
+from app_popups import PopupDatasetCreator
 
 class HomeWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -19,22 +20,24 @@ class HomeWindow(QtWidgets.QMainWindow):
         self.widget_main.setLayout(self.layout_main)
         self.setCentralWidget(self.widget_main)
 
-        self.box_datasets = QtWidgets.QGroupBox()
-        self.layout_datasets = QtWidgets.QVBoxLayout()
-        self.box_datasets.setTitle("Existing Datasets:")
-        self.box_datasets.setLayout(self.layout_datasets)
-        self.layout_main.addWidget(self.box_datasets)
+        if len(listdir("./datasets")) > 0:
+            self.box_datasets = QtWidgets.QGroupBox()
+            self.layout_datasets = QtWidgets.QVBoxLayout()
+            self.box_datasets.setTitle("Existing Datasets:")
+            self.box_datasets.setLayout(self.layout_datasets)
+            self.layout_main.addWidget(self.box_datasets)
 
-        self.bottoni = []
+            self.bottoni = []
 
-        for d in listdir("./datasets"):
-            bottone = QtWidgets.QPushButton(d[:-4])
-            bottone.pressed.connect(self.datasetPremuto)
-            self.bottoni.append(bottone)
-            self.layout_datasets.addWidget(bottone)
+            for d in listdir("./datasets"):
+                bottone = QtWidgets.QPushButton(d[:-4])
+                bottone.pressed.connect(self.datasetPremuto)
+                self.bottoni.append(bottone)
+                self.layout_datasets.addWidget(bottone)
 
         self.bottone_crea = QtWidgets.QPushButton("CREATE NEW DATASET")
         self.layout_main.addWidget(self.bottone_crea)
+        self.bottone_crea.pressed.connect(self.creaDataset)
 
     def datasetPremuto(self):
         self.root = self.parent().parent().parent().parent()
@@ -45,3 +48,8 @@ class HomeWindow(QtWidgets.QMainWindow):
                 self.root.dataframe = pd.read_csv(BytesIO(dataset_binary),index_col=0)
                 self.root.chosen_dataset = b.text()
                 b.setEnabled(False)
+    
+    def creaDataset(self):
+        root = self.parent().parent().parent().parent()
+        PopupDatasetCreator(root).exec()
+        self.load()

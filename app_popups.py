@@ -1,8 +1,9 @@
 
 from PySide6 import QtWidgets
 import pandas as pd
+from os import listdir
 
-class PopupCreator(QtWidgets.QDialog):
+class PopupVarCreator(QtWidgets.QDialog):
     #classe per il popup del pulsante che crea una nuova variabile
     def __init__(self,finestra):
         super().__init__()
@@ -70,7 +71,7 @@ class PopupCreator(QtWidgets.QDialog):
         #controlla che non ci sia già una variabile con lo stesso nome
         if self.scegli_nome.text() in [x.split("_")[1] for x in self.finestra.root.dataframe.columns]:
             self.bottone_finito.setEnabled(False)
-            self.bottone_finito.setText("choose a different name")
+            self.bottone_finito.setText("choose a new name")
         else:
             self.bottone_finito.setEnabled(True)
             self.bottone_finito.setText("create")
@@ -87,25 +88,25 @@ class PopupEditor(QtWidgets.QDialog):
         self.indice = indice
         self.nome = self.finestra.bottoni_edit[self.indice].objectName()
 
+        self.layout_main = QtWidgets.QVBoxLayout()
+        self.setLayout(self.layout_main)
+
         self.nome_editore = QtWidgets.QLineEdit(self.nome)
+        self.layout_main.addWidget(self.nome_editore)
         self.nome_editore.textChanged.connect(self.controllaNome)
 
+        self.layout_bottoni = QtWidgets.QHBoxLayout()
+        self.layout_main.addLayout(self.layout_bottoni)
+
         self.bottone_eliminatore = QtWidgets.QPushButton("DELETE IT")
+        self.layout_bottoni.addWidget(self.bottone_eliminatore)
         self.bottone_eliminatore.pressed.connect(self.eliminatore)
 
         self.bottone_salvatore = QtWidgets.QPushButton("SAVE")
-        self.bottone_salvatore.setEnabled(False)
-        self.bottone_salvatore.pressed.connect(self.salvatore)
-
-        self.layout_bottoni = QtWidgets.QHBoxLayout()
         self.layout_bottoni.addWidget(self.bottone_salvatore)
-        self.layout_bottoni.addWidget(self.bottone_eliminatore)
+        self.bottone_salvatore.pressed.connect(self.salvatore)
+        self.bottone_salvatore.setEnabled(False)
 
-        self.layout_main = QtWidgets.QVBoxLayout()
-        self.layout_main.addWidget(self.nome_editore)
-        self.layout_main.addLayout(self.layout_bottoni)
-
-        self.setLayout(self.layout_main)
 
     def eliminatore(self):
         #elimina variabile dal dataframe
@@ -129,3 +130,38 @@ class PopupEditor(QtWidgets.QDialog):
         else:
             self.bottone_salvatore.setEnabled(True)
             self.bottone_salvatore.setText("SAVE")
+
+class PopupDatasetCreator(QtWidgets.QDialog):
+    def __init__(self,root):
+        super().__init__()
+        self.root = root
+
+        self.layout_main = QtWidgets.QVBoxLayout()
+        self.setLayout(self.layout_main)
+
+        self.nome_editore = QtWidgets.QLineEdit("untitled")
+        self.layout_main.addWidget(self.nome_editore)
+        self.nome_editore.textChanged.connect(self.controllaNome)
+
+        self.bottone_salvatore = QtWidgets.QPushButton("SAVE")
+        self.layout_main.addWidget(self.bottone_salvatore)
+        self.bottone_salvatore.pressed.connect(self.salvatore)
+        self.bottone_salvatore.setEnabled(False)
+
+
+    def controllaNome(self):
+        if ".".join([self.nome_editore.text(),"bz2"]) in listdir("./datasets"):
+            self.bottone_salvatore.setText("choose a new name")
+            self.bottone_salvatore.setEnabled(False)
+        else:
+            self.bottone_salvatore.setText("SAVE")
+            self.bottone_salvatore.setEnabled(True)
+    
+    def salvatore(self):
+        self.root.chosen_dataset = self.nome_editore.text()
+        self.root.salvaDataframe()
+        self.close()
+
+
+
+
